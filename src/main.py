@@ -1,10 +1,9 @@
 import streamlit as st
 from models.dashboard import DashboardFinanceiro
 
-st.set_page_config(page_title="Dashboard Financeiro", layout="wide")
+st.set_page_config(page_title="Dashboard Financeiro", layout="wide", page_icon=":bar_chart:")
 
 def main():
-    st.title("💰 Dashboard Financeiro")
     dashboard = DashboardFinanceiro()
     dashboard.run()
 
