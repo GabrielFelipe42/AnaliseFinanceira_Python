@@ -37,6 +37,9 @@ class DashboardFinanceiro:
         if df is not None:
             self.df = df
 
+            # Configurar sidebar quando os dados são carregados
+            self._setup_sidebar()
+
             st.subheader("📋 Dados Carregados")
             st.dataframe(self.df)
 
@@ -44,8 +47,36 @@ class DashboardFinanceiro:
             filters = FilterHandler(self.df)
             self.filtered_df = filters.apply_filters()
 
-            # Gerar gráficos
-            graphs = GraphGenerator(self.filtered_df)
+            # Gerar gráficos baseado na seleção do usuário
+            self._render_selected_graphs()
+
+    def _setup_sidebar(self):
+        """Configura a sidebar com opções de gráficos e filtros"""
+        st.sidebar.header("🎛️ Configurações")
+        
+        # Seção de filtros
+        st.sidebar.subheader("🔍 Filtros")
+        
+        # Seção de gráficos
+        st.sidebar.subheader("📊 Gráficos Disponíveis")
+        st.sidebar.markdown("Selecione quais gráficos deseja visualizar:")
+
+    def _render_selected_graphs(self):
+        """Renderiza os gráficos selecionados pelo usuário"""
+        graphs = GraphGenerator(self.filtered_df)
+        
+        # Opções de gráficos disponíveis
+        grafico_pizza = st.sidebar.checkbox("📊 Distribuição por Categoria (Pizza)", value=True)
+        grafico_linha = st.sidebar.checkbox("📈 Evolução do Saldo (Linha)", value=True)
+        
+        # Renderizar gráficos baseado na seleção
+        if grafico_pizza:
             graphs.pie_chart()
+            
+        if grafico_linha:
             graphs.line_chart()
+        
+        # Mensagem quando nenhum gráfico é selecionado
+        if not grafico_pizza and not grafico_linha:
+            st.info("👆 Selecione pelo menos um gráfico na sidebar para visualizar os dados.")
 
