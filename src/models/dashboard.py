@@ -22,15 +22,20 @@ class DashboardFinanceiro:
             "- **Descrição**\n\n"
             "⬇️ Em caso de dúvidas, você pode baixar um arquivo CSV de exemplo abaixo."
         )
-        
-        with open(os.path.join("models", "../financas_exemplo.csv"), "rb") as f:
-            st.download_button(
-                label="📥 Baixar CSV de exemplo",
-                data=f,
-                file_name="financas_exemplo.csv",
-                mime="text/csv"
-            )
-        
+
+        # Caminho corrigido para o arquivo de exemplo
+        exemplo_path = os.path.join(os.path.dirname(__file__), "..", "financas_exemplo.csv")
+        if os.path.exists(exemplo_path):
+            with open(exemplo_path, "rb") as f:
+                st.download_button(
+                    label="📥 Baixar CSV de exemplo",
+                    data=f,
+                    file_name="financas_exemplo.csv",
+                    mime="text/csv"
+                )
+        else:
+            st.warning("Arquivo de exemplo não encontrado. Faça upload do seu próprio CSV.")
+
         loader = DataLoader()
         df = loader.load()
 
